@@ -29,12 +29,33 @@ public:
 	virtual void NotifyHit(class UPrimitiveComponent* MyComp, class AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 	// End AActor overrides
 
+	UFUNCTION(BlueprintCallable)
+	void Thrust(float Val);
+
+
+	UFUNCTION(BlueprintPure)
+	float GetMaxSpeed()
+	{
+		return MaxSpeed;
+	}
+
+	UFUNCTION(BlueprintPure)
+	float GetMinSpeed()
+	{
+		return MinSpeed;
+	}
+
+	UFUNCTION(BlueprintPure)
+	float GetCurrentForwardSpeed()
+	{
+		return CurrentForwardSpeed;
+	}
 protected:
 
 	// Begin APawn overrides
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override; // Allows binding actions/axes to functions
 	// End APawn overrides
-
+	
 	/** Bound to the thrust axis */
 	void ThrustInput(float Val);
 	

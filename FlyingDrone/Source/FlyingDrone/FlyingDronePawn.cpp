@@ -89,12 +89,21 @@ void AFlyingDronePawn::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	PlayerInputComponent->BindAxis("MoveRight", this, &AFlyingDronePawn::MoveRightInput);
 }
 
+void AFlyingDronePawn::Thrust(float Val)
+{
+	// Calculate new speed
+	//float NewForwardSpeed = CurrentForwardSpeed + (Val * Acceleration);
+	float NewForwardSpeed = Val;
+	// Clamp between MinSpeed and MaxSpeed
+	CurrentForwardSpeed = FMath::Clamp(NewForwardSpeed, MinSpeed, MaxSpeed);
+}
+
 void AFlyingDronePawn::ThrustInput(float Val)
 {
 	// Is there any input?
 	bool bHasInput = !FMath::IsNearlyEqual(Val, 0.f);
 	// If input is not held down, reduce speed
-	float CurrentAcc = bHasInput ? (Val * Acceleration) : (-0.5f * Acceleration);
+	float CurrentAcc = (Val * Acceleration);
 	// Calculate new speed
 	float NewForwardSpeed = CurrentForwardSpeed + (GetWorld()->GetDeltaSeconds() * CurrentAcc);
 	// Clamp between MinSpeed and MaxSpeed
