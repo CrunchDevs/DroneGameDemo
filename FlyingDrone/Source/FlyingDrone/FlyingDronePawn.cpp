@@ -30,7 +30,7 @@ AFlyingDronePawn::AFlyingDronePawn()
 	// Create a spring arm component
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm0"));
 	SpringArm->SetupAttachment(RootComponent);	// Attach SpringArm to RootComponent
-	SpringArm->TargetArmLength = 160.0f; // The camera follows at this distance behind the character	
+	SpringArm->TargetArmLength = 300.0f; // The camera follows at this distance behind the character	
 	SpringArm->SocketOffset = FVector(0.f,0.f,60.f);
 	SpringArm->bEnableCameraLag = false;	// Do not allow camera to lag
 	SpringArm->CameraLagSpeed = 15.f;
@@ -39,13 +39,14 @@ AFlyingDronePawn::AFlyingDronePawn()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera0"));
 	Camera->SetupAttachment(SpringArm, USpringArmComponent::SocketName);	// Attach the camera
 	Camera->bUsePawnControlRotation = false; // Don't rotate camera with controller
+	
 
 	// Set handling parameters
-	Acceleration = 500.f;
+	Acceleration = 25.f;
 	TurnSpeed = 50.f;
-	MaxSpeed = 4000.f;
-	MinSpeed = 500.f;
-	CurrentForwardSpeed = 500.f;
+	MaxSpeed = 10000.f;
+	MinSpeed = 0.f;
+	CurrentForwardSpeed = 0.f;
 }
 
 void AFlyingDronePawn::Tick(float DeltaSeconds)

@@ -50,6 +50,13 @@ public:
 	{
 		return CurrentForwardSpeed;
 	}
+
+	UFUNCTION(BlueprintPure)
+	float GetAcceleration()
+	{
+		return Acceleration;
+	}
+
 protected:
 
 	// Begin APawn overrides

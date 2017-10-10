@@ -6,5 +6,5 @@
 AFlyingDroneGameMode::AFlyingDroneGameMode()
 {
 	// set default pawn class to our flying pawn
-	DefaultPawnClass = AFlyingDronePawn::StaticClass();
+	//DefaultPawnClass = AFlyingDronePawn::StaticClass();
 }
