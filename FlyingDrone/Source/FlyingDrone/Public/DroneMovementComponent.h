@@ -32,13 +32,13 @@ public:
 public:
 	//Accessors
 	UFUNCTION(BlueprintPure)
-	float GetMaxSpeed()
+	float GetMaximumSpeed()
 	{
 		return MaxSpeed;
 	}
 
 	UFUNCTION(BlueprintPure)
-	float GetMinSpeed()
+	float GetMinimumSpeed()
 	{
 		return MinSpeed;
 	}
@@ -85,4 +85,6 @@ private:
 
 	/** Current roll speed */
 	float CurrentRollSpeed;
+
+	bool bIsTurning;
 };

@@ -11,7 +11,7 @@ UDroneMovementComponent::UDroneMovementComponent()
 	Acceleration = 25.f;
 	MaxSpeed = 10000.f;
 	MinSpeed = 0.f;
-	TurnSpeed = 50.f;
+	TurnSpeed = 75.f;
 	CurrentForwardSpeed = 0.f;
 }
 
@@ -22,26 +22,23 @@ void UDroneMovementComponent::TickComponent(float DeltaTime, enum ELevelTick Tic
 	auto Drone = Cast<ADrone>(GetPawnOwner());
 	Drone->AddActorLocalOffset(LocalMove, true);
 
-	FRotator DeltaRotation(0, 0, 0);
-	DeltaRotation.Pitch = CurrentPitchSpeed * DeltaTime;
-	DeltaRotation.Yaw = CurrentYawSpeed * DeltaTime;
-	DeltaRotation.Roll = CurrentRollSpeed * DeltaTime;
+	FVector DeltaRotation(0, 0, 0);
+	FQuat QuatRotation;
+	if(!bIsTurning)
+	{
+		//CurrentRollSpeed = FMath::FInterpTo(CurrentRollSpeed, -GetOwner()->GetActorRotation().Roll, GetWorld()->GetDeltaSeconds(), 2.f);
+		//UE_LOG(LogTemp, Log, TEXT("Roll: %f"), CurrentRollSpeed)
+	}
+	DeltaRotation.Y = CurrentPitchSpeed * DeltaTime;
+	DeltaRotation.Z = CurrentYawSpeed * DeltaTime;
+	DeltaRotation.X = CurrentRollSpeed * DeltaTime;
 
 	// Rotate plane
-	Drone->AddActorLocalRotation(DeltaRotation);
+	Drone->AddActorLocalRotation(FQuat::MakeFromEuler(DeltaRotation));
 
 	if (!PawnOwner || !UpdatedComponent || ShouldSkipUpdate(DeltaTime))
 		return;
 
-	FVector DesiredMovementThisFrame = ConsumeInputVector().GetClampedToMaxSize(1.0f) * DeltaTime * 150.f;
-	if (DesiredMovementThisFrame.IsNearlyZero())
-	{
-		FHitResult Hit;
-		SafeMoveUpdatedComponent(DesiredMovementThisFrame, UpdatedComponent->GetComponentRotation(), true, Hit);
-
-		if (Hit.IsValidBlockingHit())
-			SlideAlongSurface(DesiredMovementThisFrame, 1.f - Hit.Time, Hit.Normal, Hit);
-	}
 
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
@@ -76,8 +73,8 @@ void UDroneMovementComponent::MoveRight(float Val)
 
 	// If turning, yaw value is used to influence roll
 	// If not turning, roll to reverse current roll value.
-	float TargetRollSpeed = bIsTurning ? (CurrentYawSpeed * 0.5f) : (GetOwner()->GetActorRotation().Roll * -2.f);
-
+	//float TargetRollSpeed = bIsTurning ? (CurrentYawSpeed * 0.5f) : (-GetOwner()->GetActorRotation().Roll);
+	float TargetRollSpeed = CurrentYawSpeed * 0.5f;
 	// Smoothly interpolate roll speed
 	CurrentRollSpeed = FMath::FInterpTo(CurrentRollSpeed, TargetRollSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
 }

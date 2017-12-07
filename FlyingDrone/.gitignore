@@ -76,3 +76,5 @@ DerivedDataCache/*
 
 # Ignore Mobile Starter Content
 Content/MobileStarterContent
+
+Content/WaterPlane/*
