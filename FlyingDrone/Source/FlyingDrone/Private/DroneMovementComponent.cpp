@@ -2,7 +2,6 @@
 
 #include "DroneMovementComponent.h"
 #include "Drone.h"
-#include "Engine/World.h"
 
 
 
@@ -17,9 +16,13 @@ UDroneMovementComponent::UDroneMovementComponent()
 
 void UDroneMovementComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	const FVector LocalMove = FVector(CurrentForwardSpeed * DeltaTime, 0.f, 0.f);
 
-	auto Drone = Cast<ADrone>(GetPawnOwner());
+	ADrone* Drone = Cast<ADrone>(GetPawnOwner());
+
+	if (!Drone) return;
+
 	Drone->AddActorLocalOffset(LocalMove, true);
 
 	FRotator DeltaRotation(0, 0, 0);
@@ -31,19 +34,7 @@ void UDroneMovementComponent::TickComponent(float DeltaTime, enum ELevelTick Tic
 	Drone->AddActorLocalRotation(DeltaRotation);
 
 	if (!PawnOwner || !UpdatedComponent || ShouldSkipUpdate(DeltaTime))
-		return;
-
-	FVector DesiredMovementThisFrame = ConsumeInputVector().GetClampedToMaxSize(1.0f) * DeltaTime * 150.f;
-	if (DesiredMovementThisFrame.IsNearlyZero())
-	{
-		FHitResult Hit;
-		SafeMoveUpdatedComponent(DesiredMovementThisFrame, UpdatedComponent->GetComponentRotation(), true, Hit);
-
-		if (Hit.IsValidBlockingHit())
-			SlideAlongSurface(DesiredMovementThisFrame, 1.f - Hit.Time, Hit.Normal, Hit);
-	}
-
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+		return;	
 }
 
 void UDroneMovementComponent::MoveForward(float Val)

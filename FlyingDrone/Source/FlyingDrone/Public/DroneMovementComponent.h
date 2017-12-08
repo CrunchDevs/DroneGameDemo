@@ -6,6 +6,7 @@
 #include "GameFramework/PawnMovementComponent.h"
 #include "DroneMovementComponent.generated.h"
 
+
 /**
  * 
  */
@@ -32,13 +33,13 @@ public:
 public:
 	//Accessors
 	UFUNCTION(BlueprintPure)
-	float GetMaxSpeed()
+	float GetMaximumSpeed()
 	{
 		return MaxSpeed;
 	}
 
 	UFUNCTION(BlueprintPure)
-	float GetMinSpeed()
+	float GetMinimumSpeed()
 	{
 		return MinSpeed;
 	}
@@ -47,6 +48,12 @@ public:
 	float GetCurrentForwardSpeed()
 	{
 		return CurrentForwardSpeed;
+	}
+
+	UFUNCTION(BlueprintCallable)
+	void SetCurrentForwardSpeed(float InCurrentForwardSpeed)
+	{
+		CurrentForwardSpeed = InCurrentForwardSpeed;
 	}
 
 	UFUNCTION(BlueprintPure)
